@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         p1=(ImageView)findViewById(R.id.imageView);
         p2=(ImageView)findViewById(R.id.imageView2);
         btn1=(Button)findViewById(R.id.button);
-        btn2=(Button)findViewById(R.id.button2);
 
         p1.setVisibility(View.INVISIBLE);
         p1.setBackgroundResource(R.drawable.animacion);
@@ -37,19 +36,79 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btn1.setText("Stop");
                 p1.setVisibility(View.VISIBLE);
-                if(ppt.isRunning()){ppt.stop();btn1.setText("play");}else{ppt.start();}
-            }
-        });
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btn2.setText("Stop");
                 p2.setVisibility(View.VISIBLE);
-                if(ppt.isRunning()){ppt1.stop();btn2.setText("play");}else{ppt1.start();}
+
+                AsyncT01 at1=new AsyncT01();
+                AsyncT02 at2=new AsyncT02();
+
+                at2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                at1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
+    }
+
+    private class  AsyncT01 extends AsyncTask<Void, Integer,Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            ppt.start();
+            delay();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            //super.onPostExecute(aVoid);
+            if (aVoid){
+                p1.setImageResource(setImage());
+            }
+        }
+    }
+
+    private class  AsyncT02 extends AsyncTask<Void, Integer,Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            ppt1.start();
+            delay();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            //super.onPostExecute(aVoid);
+            if (aVoid){
+                p2.setImageResource(setImage());
+            }
+        }
+    }
+
+    private void delay() {
+        try {
+            Thread.sleep(6245);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int setImage(){
+        int rnd=(int) (Math.random() * 3) + 1;
+
+        switch (rnd){
+            case 1:
+                return R.drawable.papel;
+                //break;
+            case 2:
+                return R.drawable.piedra;
+                //break;
+            case 3:
+                return R.drawable.tijeras;
+                //break;
+            default:
+                return 1;
+                //break;
+        }
     }
 
 }
